@@ -401,6 +401,7 @@ if __name__ == '__main__':
 
     # train the model
     mdl.train(IICGraph(config='B', batch_norm=True, fan_out_init=64), TRAIN_SET, TEST_SET, num_epochs=600)
+    mdl.save("model.h5")
 
     print('All done!')
     plt.show()

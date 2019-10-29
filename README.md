@@ -1,46 +1,18 @@
-# IIC
-My TensorFlow Implementation of https://arxiv.org/abs/1807.06653
+# Invariant Information Clustering for Unsupervised Image Classification and Segmentation
 
-Currently supports unsupervised clustering of MNIST data. More to come (I hope).
+This repository contains PyTorch code for the <a href="https://arxiv.org/abs/1807.06653">IIC paper</a>.
 
-## Requirements
+IIC is an unsupervised clustering objective that trains neural networks into image classifiers and segmenters without labels, with state-of-the-art semantic accuracy. 
 
-Tested on Python 3.6.8 and TensorFlow 1.14 with GPU acceleration.
-I always recommend making a virtual environment.
-To install required packages on a GPU system use:
-```
-pip install -r requirements.txt
-```
-For CPU systems replace `tensorflow-gpu==1.14.0` with `tensorflow==1.14.0` in `requirements.txt` before using pip.
-Warning: I have not tried this.
+We set 9 new state-of-the-art records on unsupervised STL10 (unsupervised variant of ImageNet), CIFAR10, CIFAR20, MNIST, COCO-Stuff-3, COCO-Stuff, Potsdam-3, Potsdam, and supervised/semisupervised STL. For example:
 
-## Repository Overview
-* `data.py` contains code to construct a TensorFlow data pipeline where input perturbations are handled by the CPU.
-* `graphs.py` contains code to construct various computational graphs, whose output connects to an IIC head.
-* `models_iic.py` contains the `ClusterIIC` class, which implements unsupervised clustering.
-* `utils.py` contains some utility functions.
+<img src="https://github.com/xu-ji/IIC/raw/master/paper/unsupervised_SOTA.png" alt="unsupervised_SOTA" height=350>
 
-## Running the Code
-```
-python models_iic.py
-```
-This will train IIC for the unsupervised clustering task using the MNIST data set.
-I did my best to vigilantly adhere to the configuration in the original author's pyTorch code.
-Running this code will print to console and produce a dynamically updated learning curve similar to:
+Commands used to train the models in the paper <a href="https://github.com/xu-ji/IIC/blob/master/examples/commands.txt">here</a>. There you can also find the flag to turn on prediction drawing for MNIST:
 
-![Alt text](Figure_1.png?raw=true "Learning Curve")
+<img src="https://github.com/xu-ji/IIC/blob/master/paper/progression_labelled.png" alt="progression" height=200>
 
-For this MNIST example, the (K=10) subheads' classification error rates were:<br />
-Subhead 1 Classification error = 0.0076<br />
-Subhead 2 Classification error = 0.0076<br />
-Subhead 3 Classification error = 0.0076<br />
-Subhead 4 Classification error = 0.1500<br />
-Subhead 5 Classification error = 0.0076<br />
+How to download all our trained models <a href="https://github.com/xu-ji/IIC/blob/master/examples/trained_models.txt">here</a>.
 
-This results in a mean error rate of 0.0360.
+How to set up the segmentation datasets <a href="https://github.com/xu-ji/IIC/blob/master/datasets/README.txt">here</a>.
 
-## Notes
-The MNIST accuracy reported in https://arxiv.org/abs/1807.06653 suggests that all 5 subheads converge to ~99% accuracy.
-My run-to-run variability suggests that while at least one head always converges to very high accuracy, some heads may
-not attain ~99%. I often see 2-4 subheads at ~99% with the other subheads at ~88% accuracy. I have not yet run the code
-for the full 3200 epochs, so perhaps that resolves it.
